@@ -1,0 +1,37 @@
+<div>
+  <button class="btn btn-primary" style="margin-right: 100px" (click)="downloadJSONFile()">Pobierz dane JSON</button>
+
+  <button class="btn btn-primary" (click)="downloadXMLFile()">Pobierz dane XML</button>
+
+</div>
+
+<div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th style="
+        position: sticky;
+        top: 0;
+        background-color: white; /* Ustawia tło nagłówka na białe, aby zakryć tło tabeli */
+        z-index: 1;">
+          Kwartal
+      </th>
+      <th *ngFor="let columnName of columnsNames" style="
+        position: sticky;
+        top: 0;
+        background-color: white; /* Ustawia tło nagłówka na białe, aby zakryć tło tabeli */
+        z-index: 1;">{{columnName}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let HouseObject of allHouseValues">
+      <td>{{ getQuarterName(HouseObject.quarter) }}</td>
+      <td *ngFor="let prices of HouseObject.prices | keyvalue">
+        {{prices.value}}
+      </td>
+
+    </tr>
+
+    </tbody>
+  </table>
+</div>

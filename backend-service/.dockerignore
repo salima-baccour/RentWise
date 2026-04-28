@@ -1,0 +1,53 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Laravel specific
+.env
+.env.backup
+.env.local
+.env.*.local
+
+# Logs
+storage/logs/*
+!storage/logs/.gitignore
+
+# Cache
+storage/framework/cache/data/*
+!storage/framework/cache/data/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
+
+# Vendor (will be installed in Docker)
+vendor/
+
+# Node modules (if any)
+node_modules/
+
+# Testing
+.phpunit.result.cache
+phpunit.xml
+tests/
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Docker files in context (avoid recursion)
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,86 @@
+# ============================================
+# Docker Compose Integration Test
+# Validates that the entire stack starts correctly
+# ============================================
+
+name: Docker Compose Test
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'docker-compose.yml'
+      - 'server/Dockerfile'
+      - 'client/Dockerfile'
+      - '.github/workflows/docker-test.yml'
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  docker-compose-test:
+    name: Test Docker Compose Stack
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          APP_ENV=testing
+          APP_DEBUG=true
+          APP_KEY=base64:$(openssl rand -base64 32)
+          APP_URL=http://localhost:8000
+          DB_DATABASE=housing_prices
+          DB_USERNAME=laravel
+          DB_PASSWORD=testing_password_123
+          DB_PORT=3306
+          BACKEND_PORT=8000
+          FRONTEND_PORT=4200
+          API_URL=http://localhost:8000/api
+          EOF
+
+      - name: Build Docker images
+        run: docker compose build --no-cache
+
+      - name: Start services
+        run: docker compose up -d
+
+      - name: Wait for services to be healthy
+        run: |
+          echo "Waiting for MySQL..."
+          timeout 60 bash -c 'until docker compose exec -T mysql mysqladmin ping -h localhost -u root -ptesting_password_123 2>/dev/null; do sleep 2; done'
+          echo "MySQL is ready!"
+          
+          echo "Waiting for Backend..."
+          timeout 120 bash -c 'until curl -sf http://localhost:8000/api/health 2>/dev/null; do sleep 5; done'
+          echo "Backend is ready!"
+          
+          echo "Waiting for Frontend..."
+          timeout 60 bash -c 'until curl -sf http://localhost:4200 2>/dev/null; do sleep 2; done'
+          echo "Frontend is ready!"
+
+      - name: Test API endpoints
+        run: |
+          echo "Testing API health endpoint..."
+          curl -sf http://localhost:8000/api/health || exit 1
+          
+          echo "Testing frontend..."
+          curl -sf http://localhost:4200 | grep -q "html" || exit 1
+          
+          echo "All tests passed!"
+
+      - name: Show logs on failure
+        if: failure()
+        run: |
+          echo "=== MySQL Logs ==="
+          docker compose logs mysql
+          echo "=== Backend Logs ==="
+          docker compose logs backend
+          echo "=== Frontend Logs ==="
+          docker compose logs frontend
+
+      - name: Cleanup
+        if: always()
+        run: docker compose down -v

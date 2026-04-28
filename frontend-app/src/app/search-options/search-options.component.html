@@ -1,0 +1,64 @@
+
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+  <div class="row d-flex justify-content-around">
+    <div class="col-md-3 ">
+      <div class="form-group">
+        <label for="marketType">Rynek</label>
+        <select class="form-control" id="marketType" formControlName="marketType">
+          <option *ngFor="let mType of marketTypes;">
+            {{mType}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="offerType">Ceny</label>
+        <select class="form-control" id="offerType" formControlName="offerType">
+          <option *ngFor="let oType of offerTypes;">
+            {{oType}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="cities">Miasta</label>
+        <select class="form-control" id="cities" formControlName="cities">
+          <option *ngFor="let city of cities;">
+            {{city}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cities2">Porównaj z miastem (opcjonalnie)</label>
+        <select class="form-control" id="cities2" formControlName="cities2">
+          <option *ngFor="let city of citiesOptional;">
+            {{city}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-row">
+        <div class="col">
+          <div class="form-group">
+            <label for="start_date">Data od</label>
+            <input type="date" class="form-control" id="start_date" value="2006-01-01" formControlName="start_date" [min]="minDate" [max]="maxDate">
+          </div>
+          <div class="form-group">
+            <label for="end_date">Data do</label>
+            <input type="date" class="form-control" id="end_date" value="2007-01-01" formControlName="end_date" [min]="minDate" [max]="maxDate">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-3 align-self-end">
+      <button type="submit" class="btn btn-primary btn-block">Szukaj</button>
+    </div>
+  </div>
+
+
+
+</form>

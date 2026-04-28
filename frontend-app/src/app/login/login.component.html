@@ -1,0 +1,33 @@
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <h2 class="text-center">Logowanie</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email"
+                 class="form-control"
+                 id="email"
+                 placeholder="Wprowadź email"
+                 formControlName="email"
+          >
+        </div>
+        <div class="form-group">
+          <label for="password">Hasło</label>
+          <input type="password"
+                 class="form-control"
+                 id="password"
+                 placeholder="Wprowadź hasło"
+                 formControlName="password"
+          >
+        </div>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block">
+          Zaloguj się
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
